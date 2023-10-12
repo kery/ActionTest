@@ -1,0 +1,13 @@
+name: Release for Windows
+
+on: workflow_dispatch
+
+jobs:
+  release:
+    permissions: write-all
+    runs-on: windows-latest
+    steps:
+      - name: Install OpenSSL v1.1.1
+        run: |
+          curl -O http://ftp.vim.org/languages/qt/online/qtsdkrepository/windows_x86/desktop/.tools_openssl_x64/qt.tools.openssl.win_x64/1.1.1-22openssl_1.1.1v_prebuild_x64.7z
+          7z -h
