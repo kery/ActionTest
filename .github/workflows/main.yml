@@ -5,21 +5,30 @@ on: workflow_dispatch
 jobs:
   release:
     permissions: write-all
-    runs-on: windows-latest
+    runs-on: macos-12
     steps:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
-          version: '5.15.2'
-          host: 'windows'
+          version: '5.9.4'
           target: 'desktop'
-          arch: 'win64_msvc2019_64'
-          tools: 'tools_cmake'
+          arch: 'clang_64'
+          tools: 'tools_ifw'
           cache: true
+
+      - name: Add QtInstallerFramework to PATH
+        run: find $IQTA_TOOLS/QtInstallerFramework -name bin >> $GITHUB_PATH
+
+      - name: Install automake
+        run: brew install automake
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: true
           
-      - name: Install OpenSSL v1.1.1
-        shell: cmd
+      - name: Build Visual Statistics
         run: |
-          curl -O http://ftp.vim.org/languages/qt/online/qtsdkrepository/windows_x86/desktop/.tools_openssl_x64/qt.tools.openssl.win_x64/1.1.1-22openssl_1.1.1v_prebuild_x64.7z
-          7z x -o${{env.IQTA_TOOLS}}\.. 1.1.1-22openssl_1.1.1v_prebuild_x64.7z
-          dir %IQTA_TOOLS%
+          qmake ActionTest.pro
+          make qmake_all
+          make
