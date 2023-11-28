@@ -1,4 +1,4 @@
-#ifndef Q_OS_MACOS
+#if !defined Q_OS_MACOS
 #include <exception_handler.h>
 #endif
 #include "MainWindow.h"
